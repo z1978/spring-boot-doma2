@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<project name="doma-gen-example" default="gen" basedir=".">
+
+  <!-- DB setting -->  
+  <property name="dialectName" value="mysql"/><!-- 利用するデータベース -->
+  <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+  <property name="url" value="jdbc:mysql://localhost:3306/sample_db" />
+  <property name="user" value="test_user" />
+  <property name="password" value="hogehoge" />
+  
+  <property name="javaDestDir" value="src/main/java/"/><!-- エンティティ、DAOが作成されるルート -->
+  <property name="sqlDestDir" value="src/main/resources/"/><!-- SQLファイルが作成されるルート -->
+
+  <property name="entityPackageName" value="jp.doma2.gen.spb.entity"/><!-- エンティティが作成されるパッケージ -->
+  <property name="daoPackageName" value="jp.doma2.gen.spb.dao"/><!-- DAOが作成されるパッケージ -->
+  <property name="configClassName" value="jp.doma2.gen.spb.AppConfig"/><!-- AppConfigの場所 -->
+  <property name="sqlFilePattern" value="META-INF/**/*.sql"/><!-- SQLファイルが作成されるフォルダ -->
+  <!-- className-->
+  <property name="commonClassName" value="jp.doma2.gen.spb.App" />
+  <property name="commonListenerClassName" value="jp.doma2.gen.spb.AppConfig" />
+
+
+  <path id="classpath">
+    <fileset dir="lib"/>
+  </path>
+
+  <taskdef name="gen" classname="org.seasar.doma.extension.gen.task.Gen" classpathref="classpath" loaderref="loader"/>
+  <typedef name="entityConfig" classname="org.seasar.doma.extension.gen.task.EntityConfig" loaderref="loader"/>
+  <typedef name="daoConfig" classname="org.seasar.doma.extension.gen.task.DaoConfig" loaderref="loader"/>
+  <typedef name="sqlConfig" classname="org.seasar.doma.extension.gen.task.SqlConfig" loaderref="loader"/>
+
+  <target name="gen">
+    <gen
+      dialectName="${dialectName}"
+      driverClassName="${driverClassName}"
+      url="${url}"
+      user="${user}"
+      password="${password}">
+      <entityConfig
+        destdir="${javaDestDir}"
+        packageName="${entityPackageName}"
+      	listenerSuperclassName="${commonListenerClassName}"
+      />
+      <daoConfig
+        destdir="${javaDestDir}"
+        packageName="${daoPackageName}"
+        configClassName="${configClassName}"
+      />
+      <sqlConfig
+        destdir="${sqlDestDir}"
+      />
+    </gen>
+  </target>
+
+</project>
